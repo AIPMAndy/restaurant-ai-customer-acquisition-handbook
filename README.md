@@ -11,6 +11,15 @@
 
 **作者与合作：** [个人官网](https://metaver.vip/) · [AI 咨询与企业合作](https://metaver.vip/services) · [醒觉知识库](https://kb.metaver.vip/) · [星觉科技企业官网](https://www.a6no1.cn/) · 微信 **`AIPMAndy`**。教程永久免费，咨询或其他服务是独立的可选服务。
 
+## 官方联系渠道
+
+- **星觉科技企业官网：** https://www.a6no1.cn/
+- **微信：** `AIPMAndy`（搜索该微信号，备注「餐饮 AI 获客」）
+- **个人官网：** https://metaver.vip/
+- **咨询与企业合作：** https://metaver.vip/services
+
+以上为可选合作入口。免费开源教程无需添加微信或购买服务。
+
 ## 1分钟开始
 
 1. 直接双击 [`site/index.html`](site/index.html)，进入已经生成好的**完整网站**（无需联网/账号/数据库/API Key）。
