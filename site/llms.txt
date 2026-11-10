@@ -1,0 +1,5 @@
+# 餐饮行业 AI 获客保姆级攻略
+# 作者：AI 酋长 Andy
+# 官网 https://metaver.vip/
+# 开源仓库 https://github.com/AIPMAndy/restaurant-ai-customer-acquisition-handbook
+# 26章教程、18组提示词、30天计划。

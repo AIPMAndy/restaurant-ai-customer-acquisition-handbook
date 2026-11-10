@@ -4,9 +4,9 @@
 >
 > **作者：AI 酋长 Andy** · **版本：v1.0.0（2026-11-10）** · **完全免费开源** · **平台事实核验基准：2026-11-10**
 
-![餐饮 AI 获客保姆级攻略封面](assets/social-preview.svg)
+![餐饮 AI 获客保姆级攻略封面](site/assets/social-preview.svg)
 
-**源代码仓库（计划创建，当前发布前不可当成已上线）：** `https://github.com/AIPMAndy/restaurant-ai-customer-acquisition-handbook`  
+**GitHub 仓库（已创建，在线版仍以 Actions 验收为准）：** `https://github.com/AIPMAndy/restaurant-ai-customer-acquisition-handbook`  
 **GitHub Pages 目标地址（仓库公开并部署成功后才能访问）：** `https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/`
 
 **作者与合作：** [个人官网](https://metaver.vip/) · [AI 咨询与企业合作](https://metaver.vip/services) · [醒觉知识库](https://kb.metaver.vip/) · [星觉科技企业官网](https://www.a6no1.cn/) · 微信 **`AIPMAndy`**。教程永久免费，咨询或其他服务是独立的可选服务。
@@ -115,7 +115,7 @@ python3 -m http.server 8080 --directory site
 
 请先阅读 [PUBLISH.md](PUBLISH.md)。简述：在 `AIPMAndy` 下创建一个**新的 Public 空仓库** `restaurant-ai-customer-acquisition-handbook`（不要覆盖任何已有仓库）→ 上传本目录全部文件 → `main` 分支工作流检查成功 → Settings → Pages → Source 选择 **GitHub Actions** → 等待部署成功 → 实测网站访问、导航与手机布局。
 
-**当前发布状态：本地完整源码包已生成，不代表 GitHub 远程仓库或 Pages 现已创建。必须完成真实发布及访问核验后，才能把上面的规划地址写成已上线。**
+**在线版发布说明：仓库已创建。由于当前发布通道无法读取原 ZIP 的全部二进制和构建文件，仓库保存完整课程 Markdown、提示词、30 天计划与从这些内容生成的静态网站；ZIP 原版的完整源码、测试和配套素材需要另行通过本地 `scripts/publish.sh` 同步。GitHub Pages 是否上线以 Actions 和 HTTP 访问核验为准。**
 
 ## 参与修改与授权
 
