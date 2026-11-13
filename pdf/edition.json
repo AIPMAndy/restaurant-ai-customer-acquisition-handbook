@@ -1,0 +1,32 @@
+{
+  "repo": "restaurant-ai-customer-acquisition-handbook",
+  "title": "餐饮行业 AI 获客攻略",
+  "date": "2026-11-13",
+  "source_commit": "164c188b435da138b222cfc21f1e10e236feb2c7",
+  "pages": 47,
+  "sections": 10,
+  "source_files": [
+    "HANDBOOK.md",
+    "PLAN-30-DAYS.md",
+    "PROMPTS.md",
+    "examples/simulated-restaurant.md",
+    "templates/15_7-day-action-card.md",
+    "templates/16_ai-brief.md",
+    "templates/17_creator-brief.md",
+    "templates/18_weekly-three-actions.md",
+    "docs/PRIVACY-CHECKLIST.md",
+    "docs/SOURCES.md"
+  ],
+  "website": "https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/",
+  "bytes": 791601,
+  "sha256": "2437c28a6133ba72dc17fb6ae903cd2cbf5a44e8e19ae0656422d0166a3a1f26",
+  "pdf_path": "pdf/restaurant-ai-customer-acquisition-handbook-guide.pdf",
+  "contacts": {
+    "personal_website": "https://metaver.vip/",
+    "company_website": "https://www.a6no1.cn/",
+    "wechat": "AIPMAndy",
+    "public_account": "AI 酋长 Andy"
+  },
+  "edition": "A5 · 黑白金实操系列 · PDF 2026.11",
+  "notes": "PDF编排日期不代表所有外部政策与价格的重新核验日期。源文件许可与案例标注继续适用。"
+}
