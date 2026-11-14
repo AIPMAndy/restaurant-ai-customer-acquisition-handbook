@@ -18,6 +18,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate reviewed PDF and render QA previews
+        run: |
+          python3 -m pip install --disable-pip-version-check "pymupdf>=1.24,<2"
+          python3 scripts/check_pdf_release.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: restaurant-pdf-qa-previews
+          path: pdf-qa/
       - uses: actions/configure-pages@v5
         with:
           enablement: true
@@ -26,3 +37,32 @@ jobs:
           path: site
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify live PDF and homepage at deployed SHA
+        env:
+          PAGES_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, time, urllib.request
+          from pathlib import Path
+          edition=json.loads(Path("pdf/edition.json").read_text(encoding="utf-8"))
+          base=os.environ["PAGES_URL"].rstrip("/")+"/"
+          pdf_url=base+"downloads/restaurant-ai-customer-acquisition-handbook-guide.pdf"
+          home_url=base+"index.html"
+          for attempt in range(12):
+              try:
+                  with urllib.request.urlopen(pdf_url,timeout=25) as r: pdf=r.read()
+                  with urllib.request.urlopen(home_url,timeout=25) as r: html=r.read().decode("utf-8")
+                  if hashlib.sha256(pdf).hexdigest()!=edition["sha256"]:
+                      raise ValueError("Live PDF hash differs from the validated edition")
+                  if "downloads/restaurant-ai-customer-acquisition-handbook-guide.pdf" not in html:
+                      raise ValueError("Live homepage does not yet contain PDF link")
+                  if "application/ld+json" not in html:
+                      raise ValueError("Live homepage missing structured data")
+                  print("Verified live homepage and identical",edition["pages"],"page PDF:",pdf_url)
+                  break
+              except Exception as exc:
+                  if attempt == 11:
+                      raise
+                  print(f"CDN update not ready (try {attempt+1}/12): {exc}")
+                  time.sleep(5)
+          PY
