@@ -58,6 +58,15 @@ jobs:
                       raise ValueError("Live homepage does not yet contain PDF link")
                   if "application/ld+json" not in html:
                       raise ValueError("Live homepage missing structured data")
+                  for rel in ("tools.html", "plan.html", "assets/app.js"):
+                      with urllib.request.urlopen(base+rel,timeout=25) as r: remote=r.read()
+                      local=(Path("site")/rel).read_bytes()
+                      if hashlib.sha256(remote).hexdigest()!=hashlib.sha256(local).hexdigest():
+                          raise ValueError("Live "+rel+" differs from deployed repository SHA")
+                  if "data-export-calc" not in (Path("site/tools.html")).read_text(encoding="utf-8"):
+                      raise ValueError("Calculator export feature missing")
+                  if "data-reset-plan" not in (Path("site/plan.html")).read_text(encoding="utf-8"):
+                      raise ValueError("Planner reset feature missing")
                   print("Verified live homepage and identical",edition["pages"],"page PDF:",pdf_url)
                   break
               except Exception as exc:
