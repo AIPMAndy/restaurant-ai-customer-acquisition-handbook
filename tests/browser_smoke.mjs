@@ -57,6 +57,12 @@ try {
   assert.equal(schema.author.name,'AI 酋长 Andy');
   assert.equal(schema.publisher.url,'https://www.a6no1.cn/');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),true,'horizontal overflow');
+  await page.goto(base+'sources.html',{waitUntil:'networkidle'});
+  assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'),'https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/sources.html');
+  const sourceSchema=JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+  assert.equal(sourceSchema.dateModified,'2026-11-17');
+  assert.equal(sourceSchema.citation.length,3);
+  assert.match(await page.locator('#source-check-title').innerText(),/2026-11-17/);
   await page.goto(base+'index.html',{waitUntil:'networkidle'});
   await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.copied=text;}}}));
   await page.locator('[data-copy="AIPMAndy"]').first().click();
