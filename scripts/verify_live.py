@@ -20,10 +20,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 EXPECTED_BASE = "https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/"
 PAGES_URL = os.environ.get("PAGES_URL", "").strip()
-if not PAGES_URL:
-    raise SystemExit("PAGES_URL is required; a build alone is not online evidence.")
-BASE = PAGES_URL.rstrip("/") + "/"
-if BASE != EXPECTED_BASE:
+BASE = PAGES_URL.rstrip("/") + "/" if PAGES_URL else ""
+if BASE and BASE != EXPECTED_BASE:
     raise SystemExit(f"Unexpected Pages URL {BASE!r} (wanted {EXPECTED_BASE!r})")
 
 PDF_REL = "downloads/restaurant-ai-customer-acquisition-handbook-guide.pdf"
@@ -43,7 +41,7 @@ def inspect_source_metadata() -> dict:
     doc = (SITE / "sources.html").read_text(encoding="utf-8")
     canonical = EXPECTED_BASE + "sources.html"
     assert f'<link rel="canonical" href="{canonical}">' in doc, "Sources canonical mismatch"
-    match = re.search(r'<script type="application/ld\\+json">(.*?)</script>', doc, re.S)
+    match = re.search(r'<script type="application/ld[^"]*json">(.*?)</script>', doc, re.S)
     assert match, "No sources JSON-LD"
     graph = json.loads(match.group(1))
     assert graph.get("@context") == "https://schema.org"
@@ -101,7 +99,13 @@ def verify() -> dict:
     return qa
 
 if __name__ == "__main__":
-    inspect_source_metadata()  # fail fast on source-integrity errors
+    import sys
+    metadata = inspect_source_metadata()  # fail fast on source-integrity errors
+    if "--local" in sys.argv:
+        print(f"PASS local: {metadata['sitemap_html_urls']} valid sitemap URLs, {metadata['source_citations']} visible citations, PDF SHA-256 match")
+        raise SystemExit(0)
+    if not PAGES_URL:
+        raise SystemExit("PAGES_URL is required for live checks; use --local for source checks.")
     for attempt in range(1, 13):
         try:
             report = verify()
