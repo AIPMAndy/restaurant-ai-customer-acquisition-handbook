@@ -59,16 +59,25 @@ function calc() {
   const error = document.querySelector('#calc-error');
   const exportButton = document.querySelector('[data-export-calc]');
   const values = readAmounts();
-  if (!values) {
+  const fixedInput = document.getElementById('monthly-fixed');
+  const fixedRaw = fixedInput ? fixedInput.value.trim() : '';
+  const fixedCost = fixedRaw === '' ? null : Number(fixedRaw);
+  const invalidFixed = fixedCost !== null && (!Number.isFinite(fixedCost) || fixedCost < 0 || fixedCost > 1e9);
+  const breakEven = document.querySelector('#break-even');
+  if (!values || invalidFixed) {
     calcSnapshot = null;
     result.textContent = '单单贡献：请检查输入';
     result.style.color = '#b42318';
-    if (error) error.textContent = '请填写全部六项非负金额（单项不超过10亿元）；空白、负数或非数字不可计算。';
+    if (error) error.textContent = invalidFixed ? '每月固定成本必须是0至10亿元之间的有效金额，或留空。' : '请填写全部六项非负金额（单项不超过10亿元）；空白、负数或非数字不可计算。';
+    if (breakEven) breakEven.textContent = '保本订单：请检查输入';
     if (exportButton) exportButton.disabled = true;
     return;
   }
-  const contribution = values[0] - values.slice(1).reduce((a,b)=>a+b,0);
-  calcSnapshot = {values,contribution};
+  const contributionCents = Math.round(values[0]*100) - values.slice(1).reduce((sum,value)=>sum+Math.round(value*100),0);
+  const contribution = contributionCents / 100;
+  const breakEvenOrders = fixedCost === null ? null : fixedCost === 0 ? 0 : contributionCents > 0 ? Math.ceil(Math.round(fixedCost*100)/contributionCents) : null;
+  calcSnapshot = {values,contribution,fixedCost,breakEvenOrders};
+  if (breakEven) breakEven.textContent = fixedCost === null ? '填写月固定成本可估算保本订单量。' : fixedCost === 0 ? '月固定成本为0，无需额外订单覆盖固定成本。' : breakEvenOrders === null ? '单单贡献不大于0，无法通过增加同条件订单覆盖固定成本。' : '按当前单单贡献估算，每月至少 '+breakEvenOrders.toLocaleString('zh-CN')+' 单可覆盖填写的固定成本（未包含税费等）。';
   result.textContent = '单单贡献：¥' + contribution.toFixed(2);
   result.style.color = contribution >= 0 ? '#116455' : '#b42318';
   if (error) error.textContent = '';
@@ -89,13 +98,16 @@ document.addEventListener('click',async event=>{
   if (copy) { const value=copy.dataset.copy; feedback(copy,await copyTextExactly(value),value); return; }
   if (event.target.closest('[data-reset-calc]')) {
     for (const id of calcIds) { const el=document.getElementById(id); if (el) el.value='0'; }
+    const fixedInput=document.getElementById('monthly-fixed'); if (fixedInput) fixedInput.value='';
     calc();
     return;
   }
   if (event.target.closest('[data-export-calc]')) {
     calc();
     if (!calcSnapshot) return;
-    const rows=[['项目','金额(元)'],...amountLabels.map((label,i)=>[label,calcSnapshot.values[i].toFixed(2)]),['单单贡献',calcSnapshot.contribution.toFixed(2)],['说明','教学计算模型；未包括固定成本及税费，不是净利润或真实业绩']];
+    const rows=[['项目','数值'],...amountLabels.map((label,i)=>[label,calcSnapshot.values[i].toFixed(2)]),['单单贡献(元)',calcSnapshot.contribution.toFixed(2)]];
+    if (calcSnapshot.fixedCost !== null) rows.push(['每月固定成本(元)',calcSnapshot.fixedCost.toFixed(2)],['估算每月保本订单数',calcSnapshot.breakEvenOrders===null?'不可覆盖':String(calcSnapshot.breakEvenOrders)]);
+    rows.push(['说明','教学估算：按每单贡献不变，未覆盖税费、订单波动及未填写的成本，不是净利润或真实业绩']);
     const escapeCsv=v=>'"'+String(v).replace(/"/g,'""')+'"';
     downloadText('餐饮单单贡献测算.csv','\uFEFF'+rows.map(r=>r.map(escapeCsv).join(',')).join('\r\n'),'text/csv;charset=utf-8');
     return;

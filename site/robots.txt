@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/sitemap.xml

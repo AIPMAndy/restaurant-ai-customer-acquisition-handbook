@@ -11,17 +11,30 @@ try {
   await assert.equal(await page.locator('#result').innerText(),'单单贡献：¥0.00');
   for (const [id,value] of Object.entries({paid:'100',food:'30',fee:'5',subsidy:'10',fulfill:'5',acquire:'10'})) await page.locator('#'+id).fill(value);
   assert.match(await page.locator('#result').innerText(),/40\.00/);
+  await page.locator('#monthly-fixed').fill('18000');
+  assert.match(await page.locator('#break-even').innerText(),/450 单/);
   const downloadPromise=page.waitForEvent('download');
   await page.locator('[data-export-calc]').click();
   const file=await downloadPromise;
   assert.equal(file.suggestedFilename(),'餐饮单单贡献测算.csv');
   const csv=await readFile(await file.path(),'utf8');
   assert.match(csv,/40\.00/);
+  assert.match(csv,/18000/);
+  assert.match(csv,/450/);
+  await page.locator('#monthly-fixed').fill('-1');
+  assert.match(await page.locator('#calc-error').innerText(),/固定成本必须/);
+  assert.equal(await page.locator('[data-export-calc]').isDisabled(),true);
+  await page.locator('#monthly-fixed').fill('18000');
+  await page.locator('#paid').fill('10');
+  assert.match(await page.locator('#break-even').innerText(),/无法通过增加/);
+  await page.locator('#paid').fill('100');
   await page.locator('#food').fill('-1');
   assert.match(await page.locator('#calc-error').innerText(),/非负金额/);
   assert.equal(await page.locator('[data-export-calc]').isDisabled(),true);
   await page.locator('[data-reset-calc]').click();
   assert.equal(await page.locator('#result').innerText(),'单单贡献：¥0.00');
+  assert.equal(await page.locator('#monthly-fixed').inputValue(),'');
+  assert.match(await page.locator('#break-even').innerText(),/填写月固定成本/);
   await page.goto(base+'plan.html',{waitUntil:'networkidle'});
   assert.equal(await page.locator('[data-day]').count(),30);
   await page.locator('[data-day="D01"]').check();
@@ -44,6 +57,12 @@ try {
   assert.equal(schema.author.name,'AI 酋长 Andy');
   assert.equal(schema.publisher.url,'https://www.a6no1.cn/');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),true,'horizontal overflow');
+  await page.goto(base+'sources.html',{waitUntil:'networkidle'});
+  assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'),'https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/sources.html');
+  const sourceSchema=JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+  assert.equal(sourceSchema.dateModified,'2026-11-17');
+  assert.equal(sourceSchema.citation.length,3);
+  assert.match(await page.locator('#source-check-title').innerText(),/2026-11-17/);
   await page.goto(base+'index.html',{waitUntil:'networkidle'});
   await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.copied=text;}}}));
   await page.locator('[data-copy="AIPMAndy"]').first().click();
@@ -53,7 +72,7 @@ try {
   await page.locator('[data-copy="AIPMAndy"]').first().click();
   assert.match(await page.locator('[data-copy-feedback]').first().innerText(),/复制失败/);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),true,'homepage overflow');
-  console.log('PASS '+width+'px calculator, CSV, plan persistence/export/reset, copied/denied status, SEO, overflow');
+  console.log('PASS '+width+'px calculator, break-even, CSV, plan persistence/export/reset, copied/denied status, SEO, overflow');
   await context.close();
  }
 } finally {await browser.close();}

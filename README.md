@@ -86,50 +86,44 @@
 
 **注意：** 不同城市、行业、主体和账号权益可能不同。这里不承诺任何平台功能都一定可开通，也不承诺爆单、月入或盈利。
 
-## 项目目录
+## 已上线的第二个利润工具：固定成本保本单量估算
+
+在[单单贡献计算器](site/tools.html)填写实际收入和六类变动成本后，可**选填**每月固定成本，页面会按 `向上取整(月固定成本 ÷ 每单贡献)` 显示最低理论订单数，同时写入本机下载的 CSV。若单单贡献为零或负数，将明确提示该经营口径无法靠增加相同订单保本；非法金额阻止导出。清空金额不会上传或保存账单。
+
+**教学模拟，不是客户业绩：**若每单贡献 40 元、每月固定成本 18,000 元，单月理论保本订单量为 450 单。此估算假设每单贡献不变，且已完整计入需要覆盖的固定成本；未包含税费、单量波动和未计入的风险费用。不能替代实际损益表，也不保证盈利。
+
+## 当前项目文件结构（按仓库真实树核对）
 
 ```text
 restaurant-ai-customer-acquisition-handbook/
-├── README.md                    首屏、路径与品牌入口
-├── HANDBOOK.md                  26章完整可读教程（构建生成）
-├── PROMPTS.md                   18组提示词（构建生成）
-├── PLAN-30-DAYS.md              30天行动清单（构建生成）
-├── src/content.py               唯一可编辑内容源
-├── src/content.json             由构建器自动导出的内容快照
-├── assets/                      网站样式、交互脚本与原创SVG/PNG封面
-├── site/                        35个可直接访问的静态HTML网页和索引资源
-│   ├── guide/01.html ... 26.html
-│   ├── index.html, handbook.html, prompts.html, plan.html, tools.html
-│   ├── routes.html, sources.html, privacy.html, 404.html
-│   └── sitemap.xml, llms.txt, assets/
-├── templates/                   14个空白CSV + 4个Markdown模板
-├── examples/simulated-restaurant.md  完全虚构教学案例
-├── docs/SOURCES.md              官方来源与核验边界
-├── docs/REVIEW.md               对抗式内容、财务与隐私审核
-├── docs/CONTENT-PROMOTION.md    Threads/小红书/公众号发布稿
-├── docs/PRIVACY-CHECKLIST.md    公开素材与家庭信息边界
-├── scripts/build.py             Python零依赖静态网站构建器
-├── scripts/check.py             页面与数据完整性检查
-├── scripts/publish.sh           防误覆盖的一键推送脚本
-├── tests/test_project.py        可复现单元测试
-├── .github/workflows/pages.yml  GitHub Actions校验与Pages发布
-├── PUBLISH.md                   从空仓库到上线的操作说明
-└── LICENSE                      MIT（仅原创内容和代码）
+├── README.md / HANDBOOK.md / PROMPTS.md / PLAN-30-DAYS.md
+├── site/                 当前权威网站 HTML / assets/app.js / style.css
+│   ├── index.html / tools.html / plan.html / routes.html / sources.html
+│   ├── guide/01.html ... guide/26.html
+│   └── downloads/restaurant-ai-customer-acquisition-handbook-guide.pdf
+├── pdf/                  47 页已出版 PDF / edition.json / README.md
+├── docs/SOURCES.md       官方来源索引（非实时政策保证）
+├── templates/            14 份 CSV + 4 份 Markdown 空白模板
+├── examples/             明示虚构的餐饮教学案例
+├── scripts/check_pdf_release.py  PDF 页/文字/渲染检查
+├── tests/browser_smoke.mjs      Chromium 页面交互、下载、复制、保本测算回归
+└── .github/workflows/    Pages/PDF 线上校验、浏览器回归
 ```
 
-## 本地构建与检查
+**发布链路说明：**当前仓库的 `site/` 是可维护的静态网站源，不存在旧版 README 曾提到的 `src/content.py`、`scripts/build.py`、`scripts/check.py`、`tests/test_project.py` 等构建文件。网站直接部署 `site/`；修改时请同步维护有关 HTML、JS、CSS 和浏览器回归。PDF 当前为独立审校的正式版，不能在没有同源生成与视觉 QA 的情况下声称网站/PDF 同步改版。本轮只修改计算工具，不重写既有 47 页 PDF。
 
-Python 3.10+，无需 `pip install` / Node / 第三方API。
+## 本地预览与自动测试
 
 ```bash
-python3 scripts/build.py
-python3 scripts/check.py
-python3 -m unittest discover -s tests -v
-python3 -m http.server 8080 --directory site
-# 浏览器打开 http://localhost:8080
+python3 -m http.server 8765 --bind 127.0.0.1 --directory site
+# 浏览器打开 http://127.0.0.1:8765/tools.html
+# Chromium 回归需 Node 22、playwright@1.56.1 与已安装 Chromium
+node tests/browser_smoke.mjs
+# PDF 自动检查需先安装 pymupdf（详见 .github/workflows/pages.yml）
+python3 scripts/check_pdf_release.py
 ```
 
-网站静态页面已经包含在压缩包中。支持 `file://` 离线打开，部分浏览器在 `file://` 下可能限制本地存储/剪贴板，可用上面的本地服务打开。
+上述浏览器与 PDF 命令由不同工作流分别调用，不应将 PDF 自动渲染当成人工逐页高倍率签收。
 
 ## 发布到 GitHub Pages
 
