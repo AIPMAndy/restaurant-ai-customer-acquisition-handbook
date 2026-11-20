@@ -23,6 +23,7 @@ jobs:
         run: |
           python3 scripts/verify_live.py --local
           node --check site/assets/app.js
+          node --check site/assets/funnel.js
           python3 -m http.server 8765 --bind 127.0.0.1 --directory site >/tmp/restaurant-server.log 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
