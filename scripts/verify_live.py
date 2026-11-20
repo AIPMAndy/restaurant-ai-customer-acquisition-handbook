@@ -31,7 +31,8 @@ ASSETS = (
     "index.html", "handbook.html", "tools.html", "plan.html",
     "sources.html", "robots.txt", "sitemap.xml", "llms.txt",
     "contact.html", "privacy.html", "guide/01.html", "guide/26.html",
-    "assets/app.js", "assets/style.css", PDF_REL,
+    "assets/app.js", "assets/style.css", "funnel.html",
+    "assets/funnel.js", "assets/funnel.css", PDF_REL,
 )
 
 def digest(data: bytes) -> str:
@@ -70,6 +71,22 @@ def inspect_source_metadata() -> dict:
         assert (SITE / name).is_file(), f"Sitemap points at missing file: {name}"
     source_node = next(node for node in nodes if node.findtext("sm:loc", namespaces=namespace) == canonical)
     assert source_node.findtext("sm:lastmod", namespaces=namespace) == "2026-11-17"
+    funnel = (SITE / "funnel.html").read_text(encoding="utf-8")
+    funnel_url = EXPECTED_BASE + "funnel.html"
+    assert f'<link rel="canonical" href="{funnel_url}">' in funnel, "Funnel canonical mismatch"
+    data = re.search(r'<script type="application/ld[^"]*json">(.*?)</script>', funnel, re.S)
+    assert data, "Funnel JSON-LD missing"
+    app = json.loads(data.group(1))
+    assert app["@type"] == "WebApplication" and app["url"] == funnel_url
+    assert app["dateModified"] == "2026-11-20"
+    assert app["publisher"]["url"] == "https://www.a6no1.cn/"
+    assert app["author"]["url"] == "https://metaver.vip/"
+    assert 'data-copy="AIPMAndy"' in funnel
+    assert "不含本次新增网页工具" in funnel
+    assert "funnel.html" in (SITE / "index.html").read_text(encoding="utf-8")
+    assert "funnel.html" in (SITE / "tools.html").read_text(encoding="utf-8")
+    assert EXPECTED_BASE + "funnel.html" in urls
+    assert "data-export-funnel" in funnel
     assert (SITE / PDF_REL).read_bytes() == PDF_SOURCE.read_bytes()
     assert digest(PDF_SOURCE.read_bytes()) == EDITION["sha256"]
     return {"source_citations": len(citations), "sitemap_html_urls": len(urls), "pdf_pages": EDITION["pages"]}
