@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>到店核销漏斗核验工具｜餐饮 AI 获客攻略</title>
+<meta name="description" content="免费记录餐饮营销同批次触达、访问、到店、核销的人数，校验统计口径、计算观察性转化率并在本机导出 CSV。">
+<link rel="canonical" href="https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/funnel.html"><meta name="robots" content="index,follow">
+<meta property="og:type" content="website"><meta property="og:title" content="餐饮到店核销漏斗核验｜免费工作台">
+<meta property="og:description" content="从曝光到实际核销，只用同口径真实数据，不把观看量当成交。">
+<meta property="og:url" content="https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/funnel.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"餐饮门店到店核销漏斗核验工具","url":"https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/funnel.html","description":"按同一统计周期、同一批次的去重人数记录触达、访问、到店、核销，识别真实流失环节并导出本地CSV；不承诺营销效果。","applicationCategory":"BusinessApplication","operatingSystem":"Web browser","inLanguage":"zh-CN","isAccessibleForFree":true,"datePublished":"2026-11-20","dateModified":"2026-11-20","author":{"@type":"Person","name":"AI 酋长 Andy","url":"https://metaver.vip/"},"publisher":{"@type":"Organization","name":"星觉科技","url":"https://www.a6no1.cn/"},"citation":["https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/21.html","https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/sources.html"]}</script>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/funnel.css">
+</head><body class="funnel-page">
+<header class="top"><a class="logo" href="index.html">🍜 餐饮 AI 获客</a><nav><a href="handbook.html">26章教程</a><a href="tools.html">单单贡献</a><a href="funnel.html" aria-current="page">核销漏斗</a><a href="plan.html">30天计划</a><a href="sources.html">证据来源</a></nav></header>
+<main class="funnel-main">
+<div class="funnel-kicker">FREE TOOL / 门店经营验证</div>
+<h1>播放量不是到店量。<br>把真正的核销算清楚。</h1>
+<p class="lead">用同一批次的去重人数，从触达到核销逐步对账。输入数据只保留在当前页面，CSV 由浏览器本地生成，不上传任何经营或顾客资料。</p>
+<div class="funnel-columns">
+<section class="funnel-surface" aria-labelledby="funnel-form-title">
+<h2 id="funnel-form-title">01 / 输入同一批次真实数据</h2>
+<p class="funnel-hint">仅填写同一活动、同一渠道和同一批次的去重人数。跨平台曝光次数、订单笔数和人数不能混算；缺少同口径数据时应留空，不要估算。</p>
+<div class="funnel-dates"><div class="field"><label for="funnel-start">统计开始日期</label><input id="funnel-start" data-funnel-date type="date" required></div><div class="field"><label for="funnel-end">统计结束日期</label><input id="funnel-end" data-funnel-date type="date" required></div></div>
+<div class="funnel-fields">
+<div class="field"><label for="funnel-reach">1. 实际触达的去重人数</label><input id="funnel-reach" data-funnel type="number" inputmode="numeric" min="0" max="1000000000" step="1" placeholder="填写实际人数"></div>
+<div class="field"><label for="funnel-visit">2. 上一步中打开活动页的去重人数</label><input id="funnel-visit" data-funnel type="number" inputmode="numeric" min="0" max="1000000000" step="1" placeholder="同一批次"></div>
+<div class="field"><label for="funnel-arrive">3. 上一步中实际到店的去重人数</label><input id="funnel-arrive" data-funnel type="number" inputmode="numeric" min="0" max="1000000000" step="1" placeholder="同一批次"></div>
+<div class="field"><label for="funnel-redeem">4. 上一步中完成核销的去重人数</label><input id="funnel-redeem" data-funnel type="number" inputmode="numeric" min="0" max="1000000000" step="1" placeholder="同一批次"></div>
+</div><p id="funnel-error" class="validation-message" role="alert">请先填写日期与四项实测人数。</p>
+<div class="tool-actions"><button type="button" class="button" data-export-funnel disabled>导出核验 CSV</button><button type="button" class="button secondary" data-reset-funnel>清空本次输入</button></div>
+<p class="funnel-hint">仅对可以匹配到同一批次、且上一环节确实包含下一环节的人数计算漏斗。否则请改为分别报告各项指标。</p>
+</section>
+<section class="funnel-surface funnel-output" aria-labelledby="funnel-result-title">
+<h2 id="funnel-result-title">02 / 观察性结果</h2>
+<div class="funnel-primary"><span>触达到核销</span><strong id="funnel-total" aria-live="polite">—</strong><small>核销人数 ÷ 触达去重人数</small></div>
+<div class="funnel-metrics">
+<div><span>触达 → 打开</span><strong id="funnel-r1">—</strong></div>
+<div><span>打开 → 到店</span><strong id="funnel-r2">—</strong></div>
+<div><span>到店 → 核销</span><strong id="funnel-r3">—</strong></div>
+</div>
+<p id="funnel-observation" role="status" aria-live="polite">填写真实数据后，才显示计算结果。</p>
+<div class="funnel-boundary"><strong>结果边界</strong><p>这些只是该批次的观察比例，不能证明内容、广告或 AI 导致了成交；也不能直接代替订单数、GMV、利润或复购率。样本口径或归因不清时，先补证据。</p></div>
+</section>
+</div>
+<section class="funnel-footnote"><h2>03 / 下一步怎么用</h2><p>先用 <a href="guide/21.html">第21章「内容—问询—核销—贡献」周报方法</a> 复盘，再用 <a href="tools.html">单单贡献计算器</a> 评估成本。平台规则请看 <a href="sources.html">官方来源及历史核验边界</a>。PDF 为 2026-11-13 的历史出版版，<strong>不含本次新增网页工具</strong>；<a href="downloads/restaurant-ai-customer-acquisition-handbook-guide.pdf">仍可免费阅读原47页 PDF</a>。</p><p>工具页面发布：2026-11-20 · 作者：AI 酋长 Andy · 星觉科技。没有在页面中填写任何虚构客户、收入或成功率；真实数据由使用者自己输入核对。</p></section>
+<div class="brandbar"><strong>AI 酋长 Andy · 星觉科技</strong><span><a href="https://metaver.vip/">个人官网</a><a href="https://metaver.vip/services">咨询合作</a><a href="https://www.a6no1.cn/">企业官网</a><button class="copybtn" data-copy="AIPMAndy">复制微信 AIPMAndy</button></span></div>
+</main><footer><p>免费开源 · 原始数据留在本机 · 不承诺经营结果</p><p><a href="https://github.com/AIPMAndy/restaurant-ai-customer-acquisition-handbook">GitHub 源码</a> · <a href="privacy.html">隐私原则</a> · <a href="sources.html">官方来源</a></p></footer>
+<script src="assets/app.js"></script><script src="assets/funnel.js"></script></body></html>
