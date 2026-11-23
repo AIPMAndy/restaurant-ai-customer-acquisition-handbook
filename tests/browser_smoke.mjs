@@ -8,7 +8,10 @@ try {
   const context=await browser.newContext({viewport:{width,height:850},acceptDownloads:true});
   const page=await context.newPage();
   await page.goto(base+'tools.html',{waitUntil:'networkidle'});
-  await assert.equal(await page.locator('#result').innerText(),'单单贡献：¥0.00');
+  assert.equal(await page.locator('#result').innerText(),'单单贡献：待核算');
+  assert.equal(await page.locator('[data-export-calc]').isDisabled(),true);
+  await page.locator('#paid').fill('100');
+  assert.equal(await page.locator('[data-export-calc]').isDisabled(),true,'unknown costs must not be zero');
   for (const [id,value] of Object.entries({paid:'100',food:'30',fee:'5',subsidy:'10',fulfill:'5',acquire:'10'})) await page.locator('#'+id).fill(value);
   assert.match(await page.locator('#result').innerText(),/40\.00/);
   await page.locator('#monthly-fixed').fill('18000');
@@ -32,9 +35,22 @@ try {
   assert.match(await page.locator('#calc-error').innerText(),/非负金额/);
   assert.equal(await page.locator('[data-export-calc]').isDisabled(),true);
   await page.locator('[data-reset-calc]').click();
-  assert.equal(await page.locator('#result').innerText(),'单单贡献：¥0.00');
+  assert.equal(await page.locator('#result').innerText(),'单单贡献：待核算');
   assert.equal(await page.locator('#monthly-fixed').inputValue(),'');
-  assert.match(await page.locator('#break-even').innerText(),/填写月固定成本/);
+  assert.equal(await page.locator('#paid').inputValue(),'');
+  assert.equal(await page.locator('[data-export-calc]').isDisabled(),true);
+  for (const [id,value] of Object.entries({paid:'0.30',food:'0.10',fee:'0.20',subsidy:'0',fulfill:'0',acquire:'0'})) await page.locator('#'+id).fill(value);
+  assert.equal(await page.locator('#result').innerText(),'单单贡献：¥0.00','exact cents');
+  await page.locator('#food').fill('0.001');
+  assert.equal(await page.locator('[data-export-calc]').isDisabled(),true,'reject sub-cent inputs');
+  await page.locator('#food').fill('0.11');
+  await page.locator('#monthly-fixed').fill('0');
+  assert.equal(await page.locator('#result').innerText(),'单单贡献：¥-0.01');
+  assert.match(await page.locator('#break-even').innerText(),/扩大亏损/);
+  await page.locator('#monthly-fixed').fill('0.001');
+  assert.equal(await page.locator('[data-export-calc]').isDisabled(),true,'reject sub-cent fixed cost');
+  await page.locator('#monthly-fixed').fill('');
+  assert.equal(await page.locator('[data-export-calc]').isDisabled(),false,'fixed cost remains optional');
   await page.goto(base+'funnel.html',{waitUntil:'networkidle'});
   assert.equal(await page.locator('[data-export-funnel]').isDisabled(),true);
   assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'),
