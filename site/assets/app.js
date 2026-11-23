@@ -42,14 +42,23 @@ function updatePlan() {
   if (counter) counter.textContent = completed + '/' + checks.length + ' 天';
   if (fill) { fill.style.width = (100 * completed / checks.length) + '%'; fill.parentElement.setAttribute('role','progressbar'); fill.parentElement.setAttribute('aria-valuemin','0'); fill.parentElement.setAttribute('aria-valuemax',String(checks.length)); fill.parentElement.setAttribute('aria-valuenow',String(completed)); fill.parentElement.setAttribute('aria-label','30天任务完成进度'); }
 }
+// Parse explicit RMB values as integer cents. Unknown or sub-cent values are not zero.
+function moneyCents(raw) {
+  const match = /^(?:(\d+)(?:\.(\d{0,2}))?|\.(\d{1,2}))$/.exec(raw.trim());
+  if (!match) return null;
+  const whole = Number(match[1] || '0');
+  const fraction = Number((match[2] || match[3] || '').padEnd(2,'0'));
+  const cents = whole*100 + fraction;
+  return Number.isSafeInteger(cents) && cents <= 100000000000 ? cents : null;
+}
 function readAmounts() {
   const numbers = [];
   for (const id of calcIds) {
     const el = document.getElementById(id);
-    if (!el || !el.value.trim()) return null;
-    const val = Number(el.value);
-    if (!Number.isFinite(val) || val < 0 || val > 1e9) return null;
-    numbers.push(val);
+    if (!el || el.validity.badInput) return null;
+    const cents = moneyCents(el.value);
+    if (cents === null) return null;
+    numbers.push(cents);
   }
   return numbers;
 }
@@ -61,23 +70,24 @@ function calc() {
   const values = readAmounts();
   const fixedInput = document.getElementById('monthly-fixed');
   const fixedRaw = fixedInput ? fixedInput.value.trim() : '';
-  const fixedCost = fixedRaw === '' ? null : Number(fixedRaw);
-  const invalidFixed = fixedCost !== null && (!Number.isFinite(fixedCost) || fixedCost < 0 || fixedCost > 1e9);
+  const fixedCents = fixedRaw === '' ? null : moneyCents(fixedRaw);
+  const invalidFixed = (fixedInput && fixedInput.validity.badInput) || (fixedRaw !== '' && fixedCents === null);
+  const fixedCost = fixedCents === null ? null : fixedCents/100;
   const breakEven = document.querySelector('#break-even');
   if (!values || invalidFixed) {
     calcSnapshot = null;
-    result.textContent = '单单贡献：请检查输入';
+    result.textContent = '单单贡献：待核算';
     result.style.color = '#b42318';
-    if (error) error.textContent = invalidFixed ? '每月固定成本必须是0至10亿元之间的有效金额，或留空。' : '请填写全部六项非负金额（单项不超过10亿元）；空白、负数或非数字不可计算。';
+    if (error) error.textContent = invalidFixed ? '每月固定成本必须是0至10亿元之间的有效金额（最多两位小数），或留空。' : '请明确填写全部六项非负金额（单项不超过10亿元，最多两位小数）；未知请留空，确认没有该成本才填0。';
     if (breakEven) breakEven.textContent = '保本订单：请检查输入';
     if (exportButton) exportButton.disabled = true;
     return;
   }
-  const contributionCents = Math.round(values[0]*100) - values.slice(1).reduce((sum,value)=>sum+Math.round(value*100),0);
+  const contributionCents = values[0] - values.slice(1).reduce((sum,value)=>sum+value,0);
   const contribution = contributionCents / 100;
-  const breakEvenOrders = fixedCost === null ? null : fixedCost === 0 ? 0 : contributionCents > 0 ? Math.ceil(Math.round(fixedCost*100)/contributionCents) : null;
-  calcSnapshot = {values,contribution,fixedCost,breakEvenOrders};
-  if (breakEven) breakEven.textContent = fixedCost === null ? '填写月固定成本可估算保本订单量。' : fixedCost === 0 ? '月固定成本为0，无需额外订单覆盖固定成本。' : breakEvenOrders === null ? '单单贡献不大于0，无法通过增加同条件订单覆盖固定成本。' : '按当前单单贡献估算，每月至少 '+breakEvenOrders.toLocaleString('zh-CN')+' 单可覆盖填写的固定成本（未包含税费等）。';
+  const breakEvenOrders = fixedCents === null ? null : fixedCents === 0 && contributionCents >= 0 ? 0 : contributionCents > 0 ? Math.ceil(fixedCents/contributionCents) : null;
+  calcSnapshot = {values:values.map(cents=>cents/100),contribution,fixedCost,breakEvenOrders};
+  if (breakEven) breakEven.textContent = fixedCost === null ? '填写月固定成本可估算保本订单量。' : breakEvenOrders === null ? '单单贡献不大于0，无法通过增加同条件订单覆盖固定成本；负贡献订单即使固定成本为0也会扩大亏损。' : fixedCost === 0 ? '月固定成本为0，无需额外订单覆盖固定成本；仍须核对单单贡献。' : '按当前单单贡献估算，每月至少 '+breakEvenOrders.toLocaleString('zh-CN')+' 单可覆盖填写的固定成本（未包含税费等）。';
   result.textContent = '单单贡献：¥' + contribution.toFixed(2);
   result.style.color = contribution >= 0 ? '#116455' : '#b42318';
   if (error) error.textContent = '';
@@ -97,7 +107,7 @@ document.addEventListener('click',async event=>{
   const copy = event.target.closest('[data-copy]');
   if (copy) { const value=copy.dataset.copy; feedback(copy,await copyTextExactly(value),value); return; }
   if (event.target.closest('[data-reset-calc]')) {
-    for (const id of calcIds) { const el=document.getElementById(id); if (el) el.value='0'; }
+    for (const id of calcIds) { const el=document.getElementById(id); if (el) el.value=''; }
     const fixedInput=document.getElementById('monthly-fixed'); if (fixedInput) fixedInput.value='';
     calc();
     return;
