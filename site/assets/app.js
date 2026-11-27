@@ -28,19 +28,43 @@ function feedback(button, ok, value) {
   if (!note.parentElement) button.insertAdjacentElement('afterend',note);
   button.textContent = ok ? '已复制 ✓' : '复制失败 · 重试';
 }
-function updatePlan() {
-  const checks = [...document.querySelectorAll('[data-day]')];
-  if (!checks.length) return;
-  let completed = 0;
-  for (const input of checks) {
-    try { input.checked = localStorage.getItem('restaurant-plan-' + input.dataset.day) === 'true'; }
-    catch (_) { /* private browsing may block storage; interactive checkboxes still work */ }
-    if (input.checked) completed++;
-  }
+// Preserve the original per-day keys; never infer unchecked from unreadable storage.
+const planChecks = () => [...document.querySelectorAll('[data-day]')];
+const planKey = input => 'restaurant-plan-' + input.dataset.day;
+let lastPlan = null;
+function planStatus(message, failed = false) {
+  const status = document.querySelector('#plan-status');
+  if (status) { status.textContent = message; status.dataset.failed = String(failed); }
+}
+function updatePlan(message = '') {
+  const checks = planChecks();
+  if (!checks.length) return false;
   const counter = document.querySelector('#progress');
   const fill = document.querySelector('#fill');
+  const actions = document.querySelectorAll('[data-export-plan],[data-reset-plan]');
+  let values;
+  try {
+    values = checks.map(input => {
+      const raw = localStorage.getItem(planKey(input));
+      if (raw !== null && raw !== 'true' && raw !== 'false') throw Error('invalid stored value');
+      return raw === 'true';
+    });
+  } catch (_) {
+    checks.forEach((input,i) => { input.checked = lastPlan ? lastPlan[i] : false; input.disabled = true; });
+    actions.forEach(button => { button.disabled = true; });
+    if (counter) counter.textContent = '进度暂不可核验';
+    if (fill) { fill.style.width = '0%'; fill.parentElement.removeAttribute('aria-valuenow'); }
+    planStatus('无法读取完整打卡记录，已暂停修改和导出，未主动覆盖原数据。请检查浏览器存储后重试。',true);
+    return false;
+  }
+  lastPlan = values;
+  checks.forEach((input,i) => { input.checked = values[i]; input.disabled = false; });
+  actions.forEach(button => { button.disabled = false; });
+  const completed = values.filter(Boolean).length;
   if (counter) counter.textContent = completed + '/' + checks.length + ' 天';
   if (fill) { fill.style.width = (100 * completed / checks.length) + '%'; fill.parentElement.setAttribute('role','progressbar'); fill.parentElement.setAttribute('aria-valuemin','0'); fill.parentElement.setAttribute('aria-valuemax',String(checks.length)); fill.parentElement.setAttribute('aria-valuenow',String(completed)); fill.parentElement.setAttribute('aria-label','30天任务完成进度'); }
+  if (message) planStatus(message);
+  return true;
 }
 // Parse explicit RMB values as integer cents. Unknown or sub-cent values are not zero.
 function moneyCents(raw) {
@@ -122,25 +146,47 @@ document.addEventListener('click',async event=>{
     downloadText('餐饮单单贡献测算.csv','\uFEFF'+rows.map(r=>r.map(escapeCsv).join(',')).join('\r\n'),'text/csv;charset=utf-8');
     return;
   }
+  if (event.target.closest('[data-retry-plan]')) {
+    updatePlan('已重新读取本机打卡记录。');
+    return;
+  }
   if (event.target.closest('[data-export-plan]')) {
+    if (!updatePlan()) return;
     const rows=[...document.querySelectorAll('[data-day]')].map(el=>(el.checked?'[x] ':'[ ] ')+el.closest('label').innerText.trim());
     downloadText('餐饮30天执行记录.txt','餐饮30天计划（浏览器本地导出）\n说明：勾选仅表明已执行打卡，不证明真实经营效果。\n\n'+rows.join('\n'));
     return;
   }
   if (event.target.closest('[data-reset-plan]')) {
+    if (!updatePlan()) return;
     if (!window.confirm('确定清空本设备的30天打卡？此操作无法恢复，建议先导出记录。')) return;
-    for (const el of document.querySelectorAll('[data-day]')) {
-      el.checked=false;
-      try { localStorage.removeItem('restaurant-plan-'+el.dataset.day); } catch (_) {}
+    let failed = false;
+    for (const el of planChecks()) {
+      try { localStorage.removeItem(planKey(el)); }
+      catch (_) { failed = true; break; }
     }
-    updatePlan();
+    if (updatePlan()) {
+      if (failed) planStatus('未能完整清空，可能仅清除了部分记录；当前显示重新读取的实际进度。',true);
+      else if (lastPlan.some(Boolean)) planStatus('仍有打卡记录，可能来自其他标签页；请核对后再操作。',true);
+      else planStatus('已清空本机打卡记录。');
+    }
   }
 });
 document.addEventListener('change',event=>{
   if (event.target.matches('[data-day]')) {
-    try { localStorage.setItem('restaurant-plan-'+event.target.dataset.day,String(event.target.checked)); } catch (_) {}
-    updatePlan();
+    const input = event.target;
+    const desired = input.checked;
+    if (!updatePlan()) return;
+    let failed = false;
+    try { localStorage.setItem(planKey(input),String(desired)); }
+    catch (_) { failed = true; }
+    if (updatePlan()) {
+      if (failed || input.checked !== desired) planStatus('本次打卡未确认保存；已显示实际本机记录，请重试。',true);
+      else planStatus('已保存本机打卡。');
+    }
   }
+});
+window.addEventListener('storage',event=>{
+  if (event.key === null || event.key.startsWith('restaurant-plan-')) updatePlan('已重新读取其他标签页更新的本机记录。');
 });
 document.addEventListener('input',event=>{if(event.target.matches('[data-calc]'))calc();});
 document.addEventListener('DOMContentLoaded',()=>{
