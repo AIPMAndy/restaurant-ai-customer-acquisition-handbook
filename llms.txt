@@ -1,0 +1,88 @@
+# 餐饮行业 AI 获客保姆级攻略 🍜
+
+> 餐饮门店 AI 获客开源手册：26 章、18 组提示词、30 天计划与单单贡献计算，覆盖到店、核销与复购；免费开源，作者 AI酋长Andy
+
+- 作者：AI酋长Andy（AIPMAndy），官网 https://metaver.vip/
+- 开源仓库：https://github.com/AIPMAndy/restaurant-ai-customer-acquisition-handbook
+- 在线地址：https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/
+- 许可：MIT
+- 语言：中文（zh-CN）
+- 最近更新：2026-11-27
+
+## 这是什么
+
+免费下载《餐饮行业 AI 获客攻略》pdf/restaurant-ai-customer-acquisition-handbook-guide.pdf · 直接下载 PDFhttps://github.com/AIPMAndy/restaurant-ai-customer-acquisition-handbook/raw/refs/heads/main/pdf/restaurant-ai-customer-acquisition-handbook-guide.pdf
+47 页 · A5 手机阅读版 · 可点击目录 · 0.75 MB  
+整理日期：2026-11-13。包含完整实操正文、案例、模板与原始来源；平台规则与价格沿用原资料的核查日期。
+
+## 主要页面
+
+- [企业合作与联系方式｜餐饮 AI 获客](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/contact.html)
+- [到店核销漏斗核验工具｜餐饮 AI 获客攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/funnel.html)
+- [第01章 先定义获客，而不是只盯播放量｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/01.html)
+- [第02章 用30分钟找到周边顾客的真实需求｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/02.html)
+- [第03章 一句话说明‘为什么来这家’｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/03.html)
+- [第04章 先算一单到底能留下多少钱｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/04.html)
+- [第05章 只选一个主平台做第一轮验证｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/05.html)
+- [第06章 美团/点评门店页的第一周改造｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/06.html)
+- [第07章 抖音来客：从团购上架到核销闭环｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/07.html)
+- [第08章 小红书：用真实选店场景写笔记｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/08.html)
+- [第09章 视频号与微信：把老客服务做好｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/09.html)
+- [第10章 手机拍10条真正能带来选店意愿的内容｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/10.html)
+- [第11章 老板/厨师口播：把可信任做成内容｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/11.html)
+- [第12章 套餐标题与封面的一题三测｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/12.html)
+- [第13章 真实评价如何积累、处理和转化｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/13.html)
+- [第14章 员工端：让流量来到店里也接得住｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/14.html)
+- [第15章 到店团购券与复购券怎么设计｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/15.html)
+- [第16章 合作达人与探店：先签清楚再给钱｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/16.html)
+- [第17章 搜索与地图入口：附近用户想来时找得到｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/17.html)
+- [第18章 低预算推广怎么做：先验证再花钱｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/18.html)
+- [第19章 让顾客愿意回来，而不是天天群发优惠｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/19.html)
+- [第20章 AI客服与预订：哪些可以自动，哪些必须人工｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/20.html)
+- [第21章 建立‘内容—问询—核销—贡献’周报｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/21.html)
+- [第22章 开店前7天极简启动路线｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/22.html)
+- [第23章 30天行动路线：每周只有一个重点｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/23.html)
+- [第24章 90天从单店到多店的复制条件｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/24.html)
+- [第25章 餐饮宣传、AI生成与隐私的八条底线｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/25.html)
+- [第26章 如果你是一家餐饮店主：从今天开始的三件事｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/guide/26.html)
+- [26章完整教程｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/handbook.html)
+- [首页｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/)
+- [30天打卡计划｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/plan.html)
+- [隐私原则｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/privacy.html)
+- [18组 AI 提示词｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/prompts.html)
+- [四条门店路线｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/routes.html)
+- [官方资料｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/sources.html)
+- [单单贡献计算器｜餐饮行业 AI 获客保姆级攻略](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/tools.html)
+
+## 内容目录
+
+- 精美 PDF 电子书
+- 官方联系渠道
+- 1分钟开始
+- 为什么做这份攻略
+- 已完成交付与验收
+- 哪类餐饮老板先学哪几章
+- 三个要守住的边界
+- 平台入驻官方资料
+- 已上线的第二个利润工具：固定成本保本单量估算
+- 当前项目文件结构（按仓库真实树核对）
+- 本地预览与自动测试
+- 发布到 GitHub Pages
+- 参与修改与授权
+
+## 关键事实
+
+- 名称：餐饮行业 AI 获客保姆级攻略 🍜
+- 类型：中文开源项目 / 学习手册
+- 内容规模：26 章
+- 许可：MIT
+- 语言：中文
+- 最近更新：2026-11-27
+- 仓库：https://github.com/AIPMAndy/restaurant-ai-customer-acquisition-handbook
+
+## 相关链接
+
+- [作者官网](https://metaver.vip/)
+- [GitHub 主页](https://github.com/AIPMAndy/AIPMAndy)
+- [开源总目录](https://aipmandy.github.io/)
+- [机器可读摘要](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/llms.txt)
