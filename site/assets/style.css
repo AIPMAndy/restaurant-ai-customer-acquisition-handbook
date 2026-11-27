@@ -4,3 +4,6 @@
 
 /* Optional fixed-cost estimator: distinct, readable output without disruptive layout. */
 #monthly-fixed{max-width:330px}.break-even-result{padding:12px 15px;background:#f1f6f3;border:1px solid var(--line);border-radius:10px;color:#23493e;font-weight:650}#fixed-help{max-width:700px;font-size:13px;margin:7px 0 12px}
+
+/* Local-plan feedback and motion preference. */
+.plan-status{min-height:1.72em;margin:10px 0 0;color:var(--ink);overflow-wrap:anywhere}.plan-status[data-failed="true"]{color:#b42318}.checkrow input:disabled{cursor:not-allowed}.checkrow input{flex-shrink:0}@media(prefers-reduced-motion:reduce){.meter div{transition:none}}
