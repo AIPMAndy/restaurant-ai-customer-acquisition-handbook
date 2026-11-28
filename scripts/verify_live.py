@@ -33,6 +33,8 @@ ASSETS = (
     "contact.html", "privacy.html", "guide/01.html", "guide/26.html",
     "assets/app.js", "assets/style.css", "funnel.html",
     "assets/funnel.js", "assets/funnel.css", PDF_REL,
+    "routes.html", "prompts.html",
+    *(f"guide/{n:02d}.html" for n in range(2, 26)),
 )
 
 def digest(data: bytes) -> str:
@@ -69,6 +71,21 @@ def inspect_source_metadata() -> dict:
     for url in urls:
         name = url[len(EXPECTED_BASE):] or "index.html"
         assert (SITE / name).is_file(), f"Sitemap points at missing file: {name}"
+        page = (SITE / name).read_text(encoding="utf-8")
+        assert page.count('<link rel="canonical"') == 1, f"Canonical count: {name}"
+        assert f'<link rel="canonical" href="{url}">' in page, f"Wrong canonical: {name}"
+        assert f'<link rel="alternate" type="text/plain" href="{EXPECTED_BASE}llms.txt"' in page, f"Missing llms link: {name}"
+        assert EXPECTED_BASE + "site/" not in page, f"Source-directory URL leaked: {name}"
+        schemas = re.findall(r'<script type="application/ld\+json">(.*?)</script>', page, re.S)
+        assert schemas, f"Missing JSON-LD: {name}"
+        for schema in schemas:
+            json.loads(schema)
+    not_found = (SITE / "404.html").read_text(encoding="utf-8")
+    assert '<meta name="robots" content="noindex,follow">' in not_found
+    assert '<link rel="canonical"' not in not_found
+    llms = (SITE / "llms.txt").read_text(encoding="utf-8")
+    assert EXPECTED_BASE + PDF_REL in llms
+    assert "https://www.a6no1.cn/" in llms and "AIPMAndy" in llms
     source_node = next(node for node in nodes if node.findtext("sm:loc", namespaces=namespace) == canonical)
     assert source_node.findtext("sm:lastmod", namespaces=namespace) == "2026-11-17"
     funnel = (SITE / "funnel.html").read_text(encoding="utf-8")

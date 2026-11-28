@@ -3,3 +3,17 @@
 # 官网 https://metaver.vip/
 # 开源仓库 https://github.com/AIPMAndy/restaurant-ai-customer-acquisition-handbook
 # 26章教程、18组提示词、30天计划。
+
+> 免费开源学习资料。案例中标注的虚构演练不代表客户、成交或经营结果；平台规则以官方来源和页面标注核验日期为准。
+
+## 主要入口
+
+- [完整教程](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/handbook.html)
+- [30 天执行计划](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/plan.html)
+- [利润计算工具](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/tools.html)
+- [到店核销漏斗](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/funnel.html)
+- [来源与历史核验记录](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/sources.html)
+- [47 页免费 PDF](https://aipmandy.github.io/restaurant-ai-customer-acquisition-handbook/downloads/restaurant-ai-customer-acquisition-handbook-guide.pdf)
+- [企业官网](https://www.a6no1.cn/)
+- [咨询服务](https://metaver.vip/services)
+- 微信：AIPMAndy
